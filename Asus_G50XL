@@ -1,0 +1,33 @@
+###Synch time and date to internet
+#Be sure to connect device to internet by ethernet cable
+timedatectl set-ntp true
+
+#"lsblk" to check disks - not neccesary
+
+###Partitioning disk
+cfdisk /dev/sda
+#Now we have to make 2 partinions (both PRIMARY): One for swap and one for system and files
+#For swap partition: Size (for exampe: 4GB), Primary, Type - Linux swap / Solaris         (sda1)
+#For main partition: Size (use what left), Primary, Type - Linux                          (sda2)
+
+###Formating disk
+#Format our main partition
+mkfs.ext4 /dev/sda2
+
+#Format swap partition
+mkswap /dev/sda1
+
+#Activate swap partition
+swapon /dev/sda1
+
+###Mount partition
+mount /dev/sda2 /mnt
+#you can check if everything seems fine by cmd "lsblk". sda1 should be [SWAP] and sda should be /mnt
+
+###Install Linux
+#this command will only instal basic package of ArchLinux, linux kernel and basic firmware for hardware. Additionally it will instal text editor (nano).
+pacstrap /mnt base linux linux-firmware nano
+
+
+
+
