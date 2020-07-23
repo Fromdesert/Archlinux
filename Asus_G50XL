@@ -28,6 +28,73 @@ mount /dev/sda2 /mnt
 #this command will only instal basic package of ArchLinux, linux kernel and basic firmware for hardware. Additionally it will instal text editor (nano).
 pacstrap /mnt base linux linux-firmware nano
 
+###Generate fstab file (file system table - system configuration file that contains all available disks, disk partitions and their options)
+genfstab -U /mnt >> /mnt/etc/fstab
+#to check content type: cat /mnt/etc/fstab/
+
+###Enter to our system
+arch-chroot /mnt
+
+### Set timezone
+ln -sf /usr/share/zoneinfo/{continent}/{city} /etc/localfile
+
+#synch hardware clock to system clock
+hwclock --systohc --utc
+
+###Generate locales
+nano /etc/locale.gen
+#Uncomment your locales, then ctrl+o, enter, ctrl+x
+#generate locale
+locale-gen
+#create locale conf file
+nano /etc/locale.conf
+## WRITE YOUR LANGUAGE for exampe: LANG=EN_US.UTF-8      THEN SAVE AND EXIT
+
+###Hostname
+nano /etc/hostname
+## {your_hostname}
+
+#hosts
+nano /etc/hosts
+##  127.0.0.1     localhost
+##  ::1           localhost
+##  127.0.1.1     {your_hostname}.localdomain     {your_hostname}
+
+##Password for root
+passwd
+## {type_your_password}
+
+###Install bootloader
+pacman -S grub networkmanager network-manager-applet dialog wireless_tools wpa_supplicant os-prober mtools dosfstools base-devel linux-headers
+#Grub - bootloader
+#Networkmanager - Network connection manager and user applications
+#Network-manager-applet - Applet for managing network connections
+#Dialog - A tool to display dialog boxes from shell scripts
+#Wireless_tools - Tools allowing to manipulate the Wireless Extensions
+#wpa_supplicant - A utility providing key negotiation for WPA wireless networks
+#os-prober - Utility to detect other OSes on a set of drives
+#mtools - A collection of utilities to access MS-DOS disks
+#Dosfstools - DOS filesystem utilities
+#Base-devel - package group that includes tools needed for building (compiling and linking). Usefull when you gonna use AUR
+#Linux-headers - Headers and scripts for building modules for the Linux kernel
+
+#During installation you can pres ENTER to default installation
+
+#grub installation
+grub-install --target=i386-pc /dev/sda
+grub-mkconfig -o /boot/grub.grub.cfg
+
+###Exit install
+exit
+#unmount partition
+umount -a
+#reboot
+reboot
+
+
+
+
+
 
 
 
