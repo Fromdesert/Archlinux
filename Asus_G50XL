@@ -91,6 +91,49 @@ umount -a
 #reboot
 reboot
 
+###Activate internet
+systemctl start NetworkManager
+systemctl enable NetworkManager
+#for wireless use command: nmtui
+
+###Add new user and set password
+useradd -m {your_name}
+passwd {your_name}
+
+EDITOR=nano visudo
+#add {your_name} under line: root ALL=(ALL) ALL and save
+##{your_name} ALL=(ALL) ALL
+
+##Graphic Card Driver
+#for intel: pacman -S xf86-video-intel
+#for AMD: pacman -S xf86-video-amdgpu
+#for nvidia:
+pacman -S nvidia nvidia-utils
+
+###Display server
+pacman -S xorg
+
+###Display manager
+pacman -S lxdme
+
+systemctl enable lxdm.service
+
+###Dekstop environment
+pacman -S xfce4 xfce4-goodies pulseaudio pavucontrol xdg-user-dirs
+#xfce4 - desktop
+#xfce4-goodies - useful plugins
+#pulseaudio - general-purpose sound server
+#pavucontrol - 	PulseAudio Volume Control
+#xdg-user-dirs - Manage user directories like ~/Desktop and ~/Music
+
+reboot
+
+###THE END
+
+
+
+
+
 
 
 
